@@ -3,7 +3,7 @@
 /*
  *
  *	File		:	HANUMAN_32_mini___MACRO.h
- *	Release		:	v0.1.0
+ *	Release		:	v0.1.2
  *
  *	Created on	:	Sun 24 May 2026
  *		Author	:	hii-nice-2-meet-u
@@ -34,6 +34,11 @@
 #define __DEFINE__M2_PWM_B 27
 #define __DEFINE__M2_INH   13
 
+#define __DEFINE__M1_PWM_A__CHANNEL 0
+#define __DEFINE__M1_PWM_B__CHANNEL 1
+#define __DEFINE__M2_PWM_A__CHANNEL 2
+#define __DEFINE__M2_PWM_B__CHANNEL 3
+
 //* ----------------------------------------------------------------
 
 #define __DEFINE__MOTOR_PWM_FREQ 20000
@@ -46,6 +51,13 @@
 
 #define __DEFINE__SERVO_MIN_RANGE_DUTY 1638
 #define __DEFINE__SERVO_MAX_RANGE_DUTY 6554
+
+#define SERVO_1__CHANNEL 6
+#define SERVO_2__CHANNEL 7
+#define SERVO_3__CHANNEL 8
+#define SERVO_4__CHANNEL 9
+#define SERVO_5__CHANNEL 10
+#define SERVO_6__CHANNEL 11
 
 //* ----------------------------------------------------------------
 
@@ -64,6 +76,17 @@
 #define __DEFINE__SIGNAL_ID8  35
 #define __DEFINE__SIGNAL_ID9  37
 #define __DEFINE__SIGNAL_ID10 38
+
+#define ID1  0
+#define ID2  1
+#define ID3  2
+#define ID4  3
+#define ID5  4
+#define ID6  5
+#define ID7  6
+#define ID8  7
+#define ID9  8
+#define ID10 9
 
 //* ----------------------------------------------------------------
 

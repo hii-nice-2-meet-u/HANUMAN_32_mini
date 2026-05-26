@@ -3,7 +3,7 @@
 /*
  *
  *	File		:	h32m.h
- *	Release		:	v0.1.0
+ *	Release		:	v0.1.2
  *
  *	Created on	:	Sun 24 May 2026
  *		Author	:	hii-nice-2-meet-u

@@ -3,7 +3,7 @@
 /*
  *
  *	File		:	HANUMAN_32_mini.h
- *	Release		:	v0.1.0
+ *	Release		:	v0.1.2
  *
  *	Created on	:	Sun 24 May 2026
  *		Author	:	hii-nice-2-meet-u
@@ -113,7 +113,7 @@ uint8_t pinMapping[11] = {
 
 uint8_t digital(uint8_t channel)
 {
-	if (channel > 9)
+	if (channel > 10)
 	{
 		return 0;
 	}
@@ -128,7 +128,7 @@ uint8_t digital(uint8_t channel)
 
 void digital(uint8_t channel, uint8_t value)
 {
-	if (channel > 5)
+	if (channel > 6)
 	{
 		return;
 	}
@@ -157,8 +157,15 @@ void MotorCtrl__M1(int16_t speed)
 	else
 		PWM_value_B = PWM_value;
 
+#ifdef CONFIG_BLUEPAD32_PLATFORM_CUSTOM
+	ledcWrite(__DEFINE__M1_PWM_A__CHANNEL, PWM_value_A);
+	ledcWrite(__DEFINE__M1_PWM_B__CHANNEL, PWM_value_B);
+
+#else
 	ledcWrite(__DEFINE__M1_PWM_A, PWM_value_A);
 	ledcWrite(__DEFINE__M1_PWM_B, PWM_value_B);
+
+#endif
 }
 
 void MotorCtrl__M2(int16_t speed)
@@ -173,8 +180,15 @@ void MotorCtrl__M2(int16_t speed)
 	else
 		PWM_value_B = PWM_value;
 
+#ifdef CONFIG_BLUEPAD32_PLATFORM_CUSTOM
+	ledcWrite(__DEFINE__M2_PWM_A__CHANNEL, PWM_value_A);
+	ledcWrite(__DEFINE__M2_PWM_B__CHANNEL, PWM_value_B);
+
+#else
 	ledcWrite(__DEFINE__M2_PWM_A, PWM_value_A);
 	ledcWrite(__DEFINE__M2_PWM_B, PWM_value_B);
+
+#endif
 }
 
 /// ----------------------------------------------------------------
@@ -199,21 +213,79 @@ void motor(uint8_t channel, int16_t speed)
 	}
 }
 
-void motor(int16_t speed_M1, int16_t speed_M2)
+//- ================ Motor - Stop ================================
+
+void MotorCtrl__Break_M1(void)
 {
-	MotorCtrl__M1(speed_M1);
-	MotorCtrl__M2(speed_M2);
+#ifdef CONFIG_BLUEPAD32_PLATFORM_CUSTOM
+	ledcWrite(__DEFINE__M1_PWM_A__CHANNEL, 255);
+	ledcWrite(__DEFINE__M1_PWM_B__CHANNEL, 255);
+
+#else
+	ledcWrite(__DEFINE__M1_PWM_A, 255);
+	ledcWrite(__DEFINE__M1_PWM_B, 255);
+
+#endif
 }
 
-//- ================ Motor - Stop ================================
+void MotorCtrl__Break_M2(void)
+{
+#ifdef CONFIG_BLUEPAD32_PLATFORM_CUSTOM
+	ledcWrite(__DEFINE__M2_PWM_A__CHANNEL, 255);
+	ledcWrite(__DEFINE__M2_PWM_B__CHANNEL, 255);
+
+#else
+	ledcWrite(__DEFINE__M2_PWM_A, 255);
+	ledcWrite(__DEFINE__M2_PWM_B, 255);
+
+#endif
+}
+
+void MotorCtrl__Coast_M1(void)
+{
+#ifdef CONFIG_BLUEPAD32_PLATFORM_CUSTOM
+	ledcWrite(__DEFINE__M1_PWM_A__CHANNEL, 0);
+	ledcWrite(__DEFINE__M1_PWM_B__CHANNEL, 0);
+
+#else
+	ledcWrite(__DEFINE__M1_PWM_A, 0);
+	ledcWrite(__DEFINE__M1_PWM_B, 0);
+
+#endif
+}
+
+void MotorCtrl__Coast_M2(void)
+{
+#ifdef CONFIG_BLUEPAD32_PLATFORM_CUSTOM
+	ledcWrite(__DEFINE__M2_PWM_A__CHANNEL, 0);
+	ledcWrite(__DEFINE__M2_PWM_B__CHANNEL, 0);
+
+#else
+	ledcWrite(__DEFINE__M2_PWM_A, 0);
+	ledcWrite(__DEFINE__M2_PWM_B, 0);
+
+#endif
+}
 
 void MotorCtrl__Break(void)
 {
-	ledcWrite(__DEFINE__M1_PWM_A, 255);
-	ledcWrite(__DEFINE__M1_PWM_B, 255);
-	ledcWrite(__DEFINE__M2_PWM_A, 255);
-	ledcWrite(__DEFINE__M2_PWM_B, 255);
+	MotorCtrl__Break_M1();
+	MotorCtrl__Break_M2();
 }
+
+void MotorCtrl__Coast(void)
+{
+	MotorCtrl__Coast_M1();
+	MotorCtrl__Coast_M2();
+}
+
+#define motor_stop(void) MotorCtrl__Coast()
+#define ao(void)         MotorCtrl__Coast()
+
+#define MOTOR_STOP(void) MotorCtrl__Break()
+#define AO(void)         MotorCtrl__Break()
+
+//- ================ Motor - ENABLE / DISABLE ================================
 
 void MotorCtrl__Free(void)
 {
@@ -227,10 +299,17 @@ void MotorCtrl__UnFree(void)
 	digitalWrite(__DEFINE__M2_INH, HIGH);
 }
 
-#define motor_stop(void) MotorCtrl__Break()
-#define MOTOR_STOP(void) MotorCtrl__Free()
-#define ao(void)         MotorCtrl__Break()
-#define AO(void)         MotorCtrl__Free()
+#define motor_free(void) MotorCtrl__Free()
+#define _free(void)      MotorCtrl__Free()
+
+#define motor_unfree(void) MotorCtrl__UnFree()
+#define _unfree(void)      MotorCtrl__UnFree()
+
+#define motor_enable(void) MotorCtrl__Free()
+#define _enable(void)      MotorCtrl__Free()
+
+#define motor_disable(void) MotorCtrl__UnFree()
+#define _disable(void)      MotorCtrl__UnFree()
 
 //- ================ Motor - Function ================================
 
@@ -253,10 +332,19 @@ void m(int16_t left_speed, int16_t right_speed)
 	else
 		PWM_M2_value_B = right_speed;
 
+#ifdef CONFIG_BLUEPAD32_PLATFORM_CUSTOM
+	ledcWrite(__DEFINE__M1_PWM_A__CHANNEL, PWM_M1_value_A);
+	ledcWrite(__DEFINE__M1_PWM_B__CHANNEL, PWM_M1_value_B);
+	ledcWrite(__DEFINE__M2_PWM_A__CHANNEL, PWM_M2_value_A);
+	ledcWrite(__DEFINE__M2_PWM_B__CHANNEL, PWM_M2_value_B);
+
+#else
 	ledcWrite(__DEFINE__M1_PWM_A, PWM_M1_value_A);
 	ledcWrite(__DEFINE__M1_PWM_B, PWM_M1_value_B);
 	ledcWrite(__DEFINE__M2_PWM_A, PWM_M2_value_A);
 	ledcWrite(__DEFINE__M2_PWM_B, PWM_M2_value_B);
+
+#endif
 }
 
 /// ----------------------------------------------------------------
@@ -338,113 +426,72 @@ int __Calculate_Duty(int angle)
 
 void servo(uint8_t channel, int16_t angle)
 {
+	uint8_t PWM_Channel;
+	uint8_t ServoPin;
+
 	switch (channel)
 	{
 
 	case 1:
-		if (angle < 0)
-		{
-			ledcDetach(__DEFINE__SIGNAL_ID1);
-			ServoAttachStatus &= ~(1 << ID1);
-		}
-		else
-		{
-			if (!(ServoAttachStatus & (1 << ID1)))
-			{
-				ledcAttach(__DEFINE__SIGNAL_ID1, __DEFINE__SERVO_PWM_FREQ, __DEFINE__SERVO_PWM_RES);
-				ServoAttachStatus |= (1 << ID1);
-			}
-			ledcWrite(__DEFINE__SIGNAL_ID1, __Calculate_Duty(angle));
-		}
-		return;
+		PWM_Channel = SERVO_1__CHANNEL;
+		ServoPin    = __DEFINE__SIGNAL_ID1;
+		break;
 
 	case 2:
-		if (angle < 0)
-		{
-			ledcDetach(__DEFINE__SIGNAL_ID2);
-			ServoAttachStatus &= ~(1 << ID2);
-		}
-		else
-		{
-			if (!(ServoAttachStatus & (1 << ID2)))
-			{
-				ledcAttach(__DEFINE__SIGNAL_ID2, __DEFINE__SERVO_PWM_FREQ, __DEFINE__SERVO_PWM_RES);
-				ServoAttachStatus |= (1 << ID2);
-			}
-			ledcWrite(__DEFINE__SIGNAL_ID2, __Calculate_Duty(angle));
-		}
-		return;
+		PWM_Channel = SERVO_2__CHANNEL;
+		ServoPin    = __DEFINE__SIGNAL_ID2;
+		break;
 
 	case 3:
-		if (angle < 0)
-		{
-			ledcDetach(__DEFINE__SIGNAL_ID3);
-			ServoAttachStatus &= ~(1 << ID3);
-		}
-		else
-		{
-			if (!(ServoAttachStatus & (1 << ID3)))
-			{
-				ledcAttach(__DEFINE__SIGNAL_ID3, __DEFINE__SERVO_PWM_FREQ, __DEFINE__SERVO_PWM_RES);
-				ServoAttachStatus |= (1 << ID3);
-			}
-			ledcWrite(__DEFINE__SIGNAL_ID3, __Calculate_Duty(angle));
-		}
-		return;
+		PWM_Channel = SERVO_3__CHANNEL;
+		ServoPin    = __DEFINE__SIGNAL_ID3;
+		break;
 
 	case 4:
-		if (angle < 0)
-		{
-			ledcDetach(__DEFINE__SIGNAL_ID4);
-			ServoAttachStatus &= ~(1 << ID4);
-		}
-		else
-		{
-			if (!(ServoAttachStatus & (1 << ID4)))
-			{
-				ledcAttach(__DEFINE__SIGNAL_ID4, __DEFINE__SERVO_PWM_FREQ, __DEFINE__SERVO_PWM_RES);
-				ServoAttachStatus |= (1 << ID4);
-			}
-			ledcWrite(__DEFINE__SIGNAL_ID4, __Calculate_Duty(angle));
-		}
-		return;
+		PWM_Channel = SERVO_4__CHANNEL;
+		ServoPin    = __DEFINE__SIGNAL_ID4;
+		break;
 
 	case 5:
-		if (angle < 0)
-		{
-			ledcDetach(__DEFINE__SIGNAL_ID5);
-			ServoAttachStatus &= ~(1 << ID5);
-		}
-		else
-		{
-			if (!(ServoAttachStatus & (1 << ID5)))
-			{
-				ledcAttach(__DEFINE__SIGNAL_ID5, __DEFINE__SERVO_PWM_FREQ, __DEFINE__SERVO_PWM_RES);
-				ServoAttachStatus |= (1 << ID5);
-			}
-			ledcWrite(__DEFINE__SIGNAL_ID5, __Calculate_Duty(angle));
-		}
-		return;
+		PWM_Channel = SERVO_5__CHANNEL;
+		ServoPin    = __DEFINE__SIGNAL_ID5;
+		break;
 
 	case 6:
-		if (angle < 0)
-		{
-			ledcDetach(__DEFINE__SIGNAL_ID6);
-			ServoAttachStatus &= ~(1 << ID6);
-		}
-		else
-		{
-			if (!(ServoAttachStatus & (1 << ID6)))
-			{
-				ledcAttach(__DEFINE__SIGNAL_ID6, __DEFINE__SERVO_PWM_FREQ, __DEFINE__SERVO_PWM_RES);
-				ServoAttachStatus |= (1 << ID6);
-			}
-			ledcWrite(__DEFINE__SIGNAL_ID6, __Calculate_Duty(angle));
-		}
-		return;
+		PWM_Channel = SERVO_6__CHANNEL;
+		ServoPin    = __DEFINE__SIGNAL_ID6;
+		break;
 
 	default:
 		return;
+	}
+
+	if (angle < 0)
+	{
+#ifdef CONFIG_BLUEPAD32_PLATFORM_CUSTOM
+		ledcDetachPin(ServoPin);
+#else
+		ledcDetach(PWM_Channel);
+#endif
+		ServoAttachStatus &= ~(1 << channel);
+	}
+	else
+	{
+		if (!(ServoAttachStatus & (1 << channel)))
+#ifdef CONFIG_BLUEPAD32_PLATFORM_CUSTOM
+		{
+			ledcSetup(PWM_Channel, __DEFINE__SERVO_PWM_FREQ, __DEFINE__SERVO_PWM_RES);
+			ledcAttachPin(ServoPin, PWM_Channel);
+			ServoAttachStatus |= (1 << channel);
+		}
+		ledcWrite(PWM_Channel, __Calculate_Duty(angle));
+#else
+		{
+			ledcAttach(ServoPin, __DEFINE__SERVO_PWM_FREQ, __DEFINE__SERVO_PWM_RES);
+			ServoAttachStatus |= (1 << channel);
+		}
+		ledcWrite(ServoPin, __Calculate_Duty(angle));
+#endif
 	}
 }
 
@@ -692,6 +739,18 @@ void __initialize_Hanuman32(void)
 	digitalWrite(__DEFINE__M1_INH, LOW);
 	digitalWrite(__DEFINE__M2_INH, LOW);
 
+#ifdef CONFIG_BLUEPAD32_PLATFORM_CUSTOM
+	ledcSetup(__DEFINE__M1_PWM_A__CHANNEL, __DEFINE__MOTOR_PWM_FREQ, __DEFINE__MOTOR_PWM_RES);
+	ledcSetup(__DEFINE__M1_PWM_B__CHANNEL, __DEFINE__MOTOR_PWM_FREQ, __DEFINE__MOTOR_PWM_RES);
+	ledcSetup(__DEFINE__M2_PWM_A__CHANNEL, __DEFINE__MOTOR_PWM_FREQ, __DEFINE__MOTOR_PWM_RES);
+	ledcSetup(__DEFINE__M2_PWM_B__CHANNEL, __DEFINE__MOTOR_PWM_FREQ, __DEFINE__MOTOR_PWM_RES);
+
+	ledcAttachPin(__DEFINE__M1_PWM_A, __DEFINE__M1_PWM_A__CHANNEL);
+	ledcAttachPin(__DEFINE__M1_PWM_B, __DEFINE__M1_PWM_B__CHANNEL);
+	ledcAttachPin(__DEFINE__M2_PWM_A, __DEFINE__M2_PWM_A__CHANNEL);
+	ledcAttachPin(__DEFINE__M2_PWM_B, __DEFINE__M2_PWM_B__CHANNEL);
+
+#else
 	ledcAttach(__DEFINE__M1_PWM_A, __DEFINE__MOTOR_PWM_FREQ, __DEFINE__MOTOR_PWM_RES);
 	ledcAttach(__DEFINE__M1_PWM_B, __DEFINE__MOTOR_PWM_FREQ, __DEFINE__MOTOR_PWM_RES);
 	ledcAttach(__DEFINE__M2_PWM_A, __DEFINE__MOTOR_PWM_FREQ, __DEFINE__MOTOR_PWM_RES);
@@ -701,6 +760,8 @@ void __initialize_Hanuman32(void)
 	ledcWrite(__DEFINE__M1_PWM_B, 0);
 	ledcWrite(__DEFINE__M2_PWM_A, 0);
 	ledcWrite(__DEFINE__M2_PWM_B, 0);
+
+#endif
 
 	delay(100);
 	digitalWrite(__DEFINE__M1_INH, HIGH);
