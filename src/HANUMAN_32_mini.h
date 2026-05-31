@@ -3,9 +3,9 @@
 /*
  *
  *	File		:	HANUMAN_32_mini.h
- *	Release		:	v0.1.2
+ *	Release		:	v0.1.3
  *
- *	Created on	:	Sun 24 May 2026
+ *	Created on	:	Mon 1 Jun 2026
  *		Author	:	hii-nice-2-meet-u
  *
  */
@@ -87,6 +87,49 @@ void swA(void)
 #define is_swOK(void) is_swA(void)
 
 //- ================================================================
+
+/// ================================================================================================================================
+//\ • DIP Switch
+/// ================================================================================================================================
+
+//- ================ DIP Switch ================================
+
+uint8_t read_dip(void)
+{
+	uint8_t value = 0;
+
+	value |= ((!digitalRead(__DEFINE__DIP_1)) << 0);
+	value |= ((!digitalRead(__DEFINE__DIP_2)) << 1);
+	value |= ((!digitalRead(__DEFINE__DIP_3)) << 2);
+
+	return value;
+}
+
+#define read_DIP(void) read_dip(void)
+#define DIP(void)      read_dip(void)
+#define dip(void)      read_dip(void)
+
+uint8_t read_DIP(uint8_t channel)
+{
+	switch (channel)
+	{
+	case 1:
+		return !digitalRead(__DEFINE__DIP_1);
+
+	case 2:
+		return !digitalRead(__DEFINE__DIP_2);
+
+	case 3:
+		return !digitalRead(__DEFINE__DIP_3);
+
+	default:
+		return 0;
+	}
+}
+
+#define read_DIP(ch) read_dip(ch)
+#define DIP(ch)      read_dip(ch)
+#define dip(ch)      read_dip(ch)
 
 /// ================================================================================================================================
 //\ • Signal
@@ -511,6 +554,24 @@ GamepadPtr myGamepad;
 
 //- ================================================================
 
+//? Chanatip edited
+bool setMyVariable(int new_value, int num)
+{
+	if (my_variable[num] != new_value)
+	{
+		// Check if the value is actually changing
+		my_variable[num] = new_value;
+
+		// Place your "on change" logic here
+		// printf("Variable changed to: %d\n", my_variable);
+		if (new_value == 0)
+		{
+			return 1;
+		}
+	}
+	return 0;
+}
+
 void onConnectedGamepad(GamepadPtr gp)
 {
 	myGamepad = gp;
@@ -559,6 +620,26 @@ bool isController_Y(void)
 	return myGamepad->y();
 }
 
+bool isController_A_Click(void)
+{
+	return setMyVariable(myGamepad->a(), 0);
+}
+
+bool isController_B_Click(void)
+{
+	return setMyVariable(myGamepad->b(), 1);
+}
+
+bool isController_X_Click(void)
+{
+	return setMyVariable(myGamepad->x(), 2);
+}
+
+bool isController_Y_Click(void)
+{
+	return setMyVariable(myGamepad->y(), 3);
+}
+
 //- ================================================================
 
 bool isController_L1(void)
@@ -581,55 +662,120 @@ bool isController_R2(void)
 	return myGamepad->r2();
 }
 
+bool isController_L1_Click(void)
+{
+	return setMyVariable(myGamepad->l1(), 4);
+}
+
+bool isController_R1_Click(void)
+{
+	return setMyVariable(myGamepad->r1(), 5);
+}
+
+bool isController_L2_Click(void)
+{
+	return setMyVariable(myGamepad->l2(), 6);
+}
+
+bool isController_R2_Click(void)
+{
+	return setMyVariable(myGamepad->r2(), 7);
+}
+
 //- ================================================================
 
-bool isController_UP(void)
+bool isController_UP_Press(void)
 {
 	return myGamepad->dpad() & DPAD_UP;
 }
 
-bool isController_DOWN(void)
+bool isController_DOWN_Press(void)
 {
 	return myGamepad->dpad() & DPAD_DOWN;
 }
 
-bool isController_LEFT(void)
+bool isController_LEFT_Press(void)
 {
 	return myGamepad->dpad() & DPAD_LEFT;
 }
 
-bool isController_RIGHT(void)
+bool isController_RIGHT_Press(void)
 {
 	return myGamepad->dpad() & DPAD_RIGHT;
 }
 
+bool isController_UP_Click(void)
+{
+	return setMyVariable(myGamepad->dpad() & DPAD_UP, 8);
+}
+
+bool isController_DOWN_Click(void)
+{
+	return setMyVariable(myGamepad->dpad() & DPAD_DOWN, 9);
+}
+
+bool isController_LEFT_Click(void)
+{
+	return setMyVariable(myGamepad->dpad() & DPAD_LEFT, 10);
+}
+
+bool isController_RIGHT_Click(void)
+{
+	return setMyVariable(myGamepad->dpad() & DPAD_RIGHT, 11);
+}
+
 //- ================================================================
 
-bool isController_Home(void)
+bool isController_Home_Press(void)
 {
 	return myGamepad->miscButtons() & 0x01;
 }
 
-bool isController_Share(void)
+bool isController_Share_Press(void)
 {
 	return myGamepad->miscButtons() & 0x02;
 }
 
-bool isController_Option(void)
+bool isController_Option_Press(void)
 {
 	return myGamepad->miscButtons() & 0x04;
 }
 
+bool isController_Home_Click(void)
+{
+	return setMyVariable(myGamepad->miscButtons() & 0x01, 12);
+}
+
+bool isController_Share_Click(void)
+{
+	return setMyVariable(myGamepad->miscButtons() & 0x02, 13);
+}
+
+bool isController_Option_Click(void)
+{
+	return setMyVariable(myGamepad->miscButtons() & 0x04, 14);
+}
+
 //- ================================================================
 
-bool isController_LeftStick(void)
+bool isController_LeftStick_Press(void)
 {
 	return myGamepad->buttons() & BUTTON_THUMB_L;
 }
 
-bool isController_RightStick(void)
+bool isController_RightStick_Press(void)
 {
 	return myGamepad->buttons() & BUTTON_THUMB_R;
+}
+
+bool isController_LeftStick_Click(void)
+{
+	return setMyVariable(myGamepad->buttons() & BUTTON_THUMB_L, 15);
+}
+
+bool isController_RightStick_Click(void)
+{
+	return setMyVariable(myGamepad->buttons() & BUTTON_THUMB_R, 16);
 }
 
 //- ================================================================
