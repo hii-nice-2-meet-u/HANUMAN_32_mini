@@ -3,9 +3,9 @@
 /*
  *
  *	File		:	HANUMAN_32_mini.h
- *	Release		:	v0.1.3
+ *	Release		:	v0.1.4
  *
- *	Created on	:	Mon 1 Jun 2026
+ *	Created on	:	Mon 3 Jun 2026
  *		Author	:	hii-nice-2-meet-u
  *
  */
@@ -105,11 +105,7 @@ uint8_t read_dip(void)
 	return value;
 }
 
-#define read_DIP(void) read_dip(void)
-#define DIP(void)      read_dip(void)
-#define dip(void)      read_dip(void)
-
-uint8_t read_DIP(uint8_t channel)
+uint8_t read_dip(uint8_t channel)
 {
 	switch (channel)
 	{
@@ -127,9 +123,9 @@ uint8_t read_DIP(uint8_t channel)
 	}
 }
 
-#define read_DIP(ch) read_dip(ch)
-#define DIP(ch)      read_dip(ch)
-#define dip(ch)      read_dip(ch)
+#define read_DIP read_dip
+#define DIP      read_dip
+#define dip      read_dip
 
 /// ================================================================================================================================
 //\ • Signal

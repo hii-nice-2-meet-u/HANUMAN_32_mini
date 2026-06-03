@@ -3,7 +3,7 @@
 /*
  *
  *	File		:	HANUMAN_32_mini___MACRO.h
- *	Release		:	v0.1.3
+ *	Release		:	v0.1.x
  *
  *	Created on	:	Mon 1 Jun 2026
  *		Author	:	hii-nice-2-meet-u
