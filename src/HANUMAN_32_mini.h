@@ -3,9 +3,9 @@
 /*
  *
  *	File		:	HANUMAN_32_mini.h
- *	Release		:	v0.1.4
+ *	Release		:	v0.1.5
  *
- *	Created on	:	Mon 3 Jun 2026
+ *	Created on	:	Thu 8 Oct 2026
  *		Author	:	hii-nice-2-meet-u
  *
  */
@@ -152,6 +152,8 @@ uint8_t pinMapping[11] = {
 
 uint8_t digital(uint8_t channel)
 {
+	if (!channel)
+		return 0;
 	if (channel > 10)
 	{
 		return 0;
@@ -167,6 +169,8 @@ uint8_t digital(uint8_t channel)
 
 void digital(uint8_t channel, uint8_t value)
 {
+	if (!channel)
+		return;
 	if (channel > 6)
 	{
 		return;
@@ -876,6 +880,8 @@ int32_t Controller_accelZ(void)
 
 void __initialize_Hanuman32(void)
 {
+	pinMode(__DEFINE__Switch, INPUT);
+
 	pinMode(__DEFINE__M1_INH, OUTPUT);
 	pinMode(__DEFINE__M2_INH, OUTPUT);
 	digitalWrite(__DEFINE__M1_INH, LOW);

@@ -3,9 +3,9 @@
 /*
  *
  *	File		:	HANUMAN_32_mini___MACRO.h
- *	Release		:	v0.1.x
+ *	Release		:	v0.1.5
  *
- *	Created on	:	Mon 1 Jun 2026
+ *	Created on	:	Thu 8 Oct 2026
  *		Author	:	hii-nice-2-meet-u
  *
  */
@@ -77,16 +77,16 @@
 #define __DEFINE__SIGNAL_ID9  37
 #define __DEFINE__SIGNAL_ID10 38
 
-#define ID1  0
-#define ID2  1
-#define ID3  2
-#define ID4  3
-#define ID5  4
-#define ID6  5
-#define ID7  6
-#define ID8  7
-#define ID9  8
-#define ID10 9
+#define ID1  1
+#define ID2  2
+#define ID3  3
+#define ID4  4
+#define ID5  5
+#define ID6  6
+#define ID7  7
+#define ID8  8
+#define ID9  9
+#define ID10 10
 
 //* ----------------------------------------------------------------
 
