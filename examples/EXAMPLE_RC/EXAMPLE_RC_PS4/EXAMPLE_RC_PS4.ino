@@ -1,46 +1,27 @@
 #include <HANUMAN_32_mini.h>
-#include <Bluepad32.h>
 
 //- ================================================================================================
 
-#define DRIVE_SPEED 200
-
-GamepadPtr myGamepad = nullptr;
-
-void onConnectedGamepad(GamepadPtr gp)
-{
-	myGamepad = gp;
-	Serial.println("PS4 เชื่อมต่อแล้ว!");
-}
-
-void onDisconnectedGamepad(GamepadPtr gp)
-{
-	myGamepad = nullptr;
-	Serial.println("PS4 ตัดการเชื่อมต่อ");
-}
+#define DRIVE_SPEED 100
 
 //- ================================================================================================
 
 void setup()
 {
 	Serial.begin(115200);
-
-	// Bluepad32
-	BP32.setup(&onConnectedGamepad, &onDisconnectedGamepad);
-	Serial.println("รอการเชื่อมต่อ PS4...");
+	Controller_Connect();
 }
 
 void loop()
 {
-	BP32.update();
 
-	if (myGamepad && myGamepad->isConnected())
+	if (Controller_Update())
 	{
 
-		bool L1 = myGamepad->l1();
-		bool R1 = myGamepad->r1();
-		bool L2 = myGamepad->l2();
-		bool R2 = myGamepad->r2();
+		bool L1 = isController_L1_Press();
+		bool R1 = isController_R1_Press();
+		bool L2 = isController_L2_Press();
+		bool R2 = isController_R2_Press();
 
 		if (L1 && R1)
 		{
@@ -60,43 +41,36 @@ void loop()
 		}
 		else
 		{
-			uint16_t btn  = myGamepad->buttons();
-			uint8_t  misc = myGamepad->miscButtons();
 
-			if (btn & 0x0001)
-				Serial.println("Cross (X)");
-			if (btn & 0x0002)
-				Serial.println("Circle (O)");
-			if (btn & 0x0004)
-				Serial.println("Square");
-			if (btn & 0x0008)
-				Serial.println("Triangle");
-			if (btn & 0x0100)
+			if (isController_A_Press())
+				Serial.println("Cross (X) / (A)");
+			if (isController_B_Press())
+				Serial.println("Circle (O) / (B)");
+			if (isController_X_Press())
+				Serial.println("Square / (X)");
+			if (isController_Y_Press())
+				Serial.println("Triangle / (Y)");
+			if (isController_LeftStick_Press())
 				Serial.println("L3");
-			if (btn & 0x0200)
+			if (isController_RightStick_Press())
 				Serial.println("R3");
-			if (btn & 0x0400)
+			if (isController_UP_Press())
 				Serial.println("D-Pad Up");
-			if (btn & 0x0800)
+			if (isController_DOWN_Press())
 				Serial.println("D-Pad Down");
-			if (btn & 0x1000)
+			if (isController_LEFT_Press())
 				Serial.println("D-Pad Left");
-			if (btn & 0x2000)
+			if (isController_RIGHT_Press())
 				Serial.println("D-Pad Right");
-			if (misc & 0x01)
+			if (isController_Share_Click())
 				Serial.println("Share");
-			if (misc & 0x02)
+			if (isController_Home_Click())
 				Serial.println("PS Button");
-			if (misc & 0x04)
+			if (isController_Option_Click())
 				Serial.println("Options");
 
 			ao();
 		}
-	}
-	else
-	{
-		Serial.println("รอการเชื่อมต่อ PS4...");
-		delay(1000);
 	}
 
 	delay(50);

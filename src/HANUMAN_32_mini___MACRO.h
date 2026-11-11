@@ -90,10 +90,10 @@
 
 //* ----------------------------------------------------------------
 
-#define __DEFINE__SPI_CS   __DEFINE__SIGNAL_1
-#define __DEFINE__SPI_MISO __DEFINE__SIGNAL_2
-#define __DEFINE__SPI_MOSI __DEFINE__SIGNAL_3
-#define __DEFINE__SPI_SCLK __DEFINE__SIGNAL_4
+#define __DEFINE__SPI_CS   __DEFINE__SIGNAL_ID1
+#define __DEFINE__SPI_MISO __DEFINE__SIGNAL_ID2
+#define __DEFINE__SPI_MOSI __DEFINE__SIGNAL_ID3
+#define __DEFINE__SPI_SCLK __DEFINE__SIGNAL_ID4
 
 //* ----------------------------------------------------------------
 

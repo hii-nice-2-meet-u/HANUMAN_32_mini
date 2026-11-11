@@ -514,7 +514,7 @@ void servo(uint8_t channel, int16_t angle)
 #ifdef CONFIG_BLUEPAD32_PLATFORM_CUSTOM
 		ledcDetachPin(ServoPin);
 #else
-		ledcDetach(PWM_Channel);
+		ledcDetach(ServoPin);
 #endif
 		ServoAttachStatus &= ~(1 << channel);
 	}
