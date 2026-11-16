@@ -3,7 +3,7 @@
 /*
  *
  *	File		:	HANUMAN_32_mini.h
- *	Release		:	v0.1.5
+ *	Release		:	v0.1.8
  *
  *	Created on	:	Thu 8 Oct 2026
  *		Author	:	hii-nice-2-meet-u
@@ -160,6 +160,32 @@ uint8_t digital(uint8_t channel)
 	}
 	pinMode(pinMapping[channel], INPUT);
 	return digitalRead(pinMapping[channel]);
+}
+
+//- ================ Digital IN - Filtered ================================
+// IN1-IN6 (TXS0108E) can oscillate with some sensors (e.g. ARTRON IR-Distance)
+// read IN_F_SAMPLES times, return 0 only if >= IN_F_ZERO_PCT % are LOW
+
+#define IN_F(channel) in_f(channel)
+
+uint8_t in_f(uint8_t channel)
+{
+	if (!channel)
+		return 0;
+	if (channel > 10)
+	{
+		return 0;
+	}
+	pinMode(pinMapping[channel], INPUT);
+
+	uint8_t zeros = 0;
+	for (uint8_t i = 0; i < IN_F_SAMPLES; i++)
+	{
+		if (!digitalRead(pinMapping[channel]))
+			zeros++;
+		delayMicroseconds(IN_F_GAP_US);
+	}
+	return (zeros * 100 >= IN_F_ZERO_PCT * IN_F_SAMPLES) ? 0 : 1;
 }
 
 //- ================ Digital OUT ================================
@@ -392,49 +418,49 @@ void m(int16_t left_speed, int16_t right_speed)
 
 /// ----------------------------------------------------------------
 
-void fd(int8_t speed)
+void fd(int16_t speed)
 {
 	MotorCtrl__M1(speed);
 	MotorCtrl__M2(speed);
 }
 
-void fd2(int8_t left_speed, int8_t right_speed)
+void fd2(int16_t left_speed, int16_t right_speed)
 {
 	MotorCtrl__M1(left_speed);
 	MotorCtrl__M2(right_speed);
 }
 
-void bk(int8_t speed)
+void bk(int16_t speed)
 {
 	MotorCtrl__M1(-speed);
 	MotorCtrl__M2(-speed);
 }
 
-void bk2(int8_t left_speed, int8_t right_speed)
+void bk2(int16_t left_speed, int16_t right_speed)
 {
 	MotorCtrl__M1(-left_speed);
 	MotorCtrl__M2(-right_speed);
 }
 
-void tl(int8_t speed)
+void tl(int16_t speed)
 {
 	MotorCtrl__M1(0);
 	MotorCtrl__M2(speed);
 }
 
-void tr(int8_t speed)
+void tr(int16_t speed)
 {
 	MotorCtrl__M1(speed);
 	MotorCtrl__M2(0);
 }
 
-void sl(int8_t speed)
+void sl(int16_t speed)
 {
 	MotorCtrl__M1(-speed);
 	MotorCtrl__M2(speed);
 }
 
-void sr(int8_t speed)
+void sr(int16_t speed)
 {
 	MotorCtrl__M1(speed);
 	MotorCtrl__M2(-speed);

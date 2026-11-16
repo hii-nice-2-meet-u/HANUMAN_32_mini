@@ -3,7 +3,7 @@
 /*
  *
  *	File		:	HANUMAN_32_mini___MACRO.h
- *	Release		:	v0.1.5
+ *	Release		:	v0.1.8
  *
  *	Created on	:	Thu 8 Oct 2026
  *		Author	:	hii-nice-2-meet-u
@@ -26,13 +26,13 @@
 
 //* ----------------------------------------------------------------
 
-#define __DEFINE__M1_PWM_A 25
-#define __DEFINE__M1_PWM_B 33
-#define __DEFINE__M1_INH   32
+#define __DEFINE__M1_PWM_A 26
+#define __DEFINE__M1_PWM_B 27
+#define __DEFINE__M1_INH   13
 
-#define __DEFINE__M2_PWM_A 26
-#define __DEFINE__M2_PWM_B 27
-#define __DEFINE__M2_INH   13
+#define __DEFINE__M2_PWM_A 25
+#define __DEFINE__M2_PWM_B 33
+#define __DEFINE__M2_INH   32
 
 #define __DEFINE__M1_PWM_A__CHANNEL 0
 #define __DEFINE__M1_PWM_B__CHANNEL 1
@@ -87,6 +87,20 @@
 #define ID8  8
 #define ID9  9
 #define ID10 10
+
+//* ----------------------------------------------------------------
+
+#ifndef IN_F_SAMPLES
+#define IN_F_SAMPLES 32
+#endif
+
+#ifndef IN_F_GAP_US
+#define IN_F_GAP_US 20
+#endif
+
+#ifndef IN_F_ZERO_PCT
+#define IN_F_ZERO_PCT 90
+#endif
 
 //* ----------------------------------------------------------------
 
